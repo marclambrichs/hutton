@@ -113,5 +113,4 @@ luhnDouble x | 2 * x <= 9 = 2 * x
 -- Using luhnDouble and the integer remainder function mod, define a function
 -- luhn that decides if a four-digit bank card number is valid.
 luhn :: Int -> Int -> Int -> Int -> Bool
-luhn w x y z | (luhnDouble w + x +luhnDouble y + z) `mod` 10 == 0 = True
-             | otherwise                                          = False
+luhn w x y z = (luhnDouble w + x +luhnDouble y + z) `mod` 10 == 0
