@@ -60,14 +60,16 @@ uncurry' f = \(x,y) -> f x y
 unfold p h t x | p x       = []
                | otherwise = h x : unfold p h t (t x)
 
-
 int2bin = unfold (==0) (`mod` 2) (`div` 2)
 
---chop8 :: [Bit] -> [[Bit]]
---chop8 = unfold (\xs -> length xs == 8)
---
---map' :: (a -> b) -> [a] -> [b]
---map' f xs
+chop8 :: [a] -> [[a]]
+chop8 = unfold (null) (take 8) (drop 8)
+
+map'' :: (a -> b) -> [a] -> [b]
+map'' f = unfold (null) (f . head) (tail)
+
+iterate' :: (a -> a) -> a -> [a]
+iterate' f = unfold (\x -> False) (f) (f)
 
 -- exercise 9
 -- Define a function altMap that alternatively applies its two argument functions
