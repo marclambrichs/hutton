@@ -85,7 +85,7 @@ make8 :: [Bit] -> [Bit]
 make8 bits = take 8 (bits ++ repeat 0)
 
 addParity :: [Bit] -> [Bit]
-addParity bits = (sum bits `mod` 2) : bits
+addParity = (\bits -> (sum bits `mod` 2):bits)
 
 checkParity :: [Bit] -> [Bit]
 checkParity (x:xs) | x == sum xs `mod` 2 = xs
