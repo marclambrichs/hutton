@@ -1,6 +1,7 @@
 -- File hutton/ch7.hs
 -- Programming in Haskell - Graham Hutton - 2nd edition
 -- Chapter 7 exercises
+import Data.Char
 
 -- exercise 1
 -- Show how the list comprehension [f x | x <- xs, px] can be re-expressed
@@ -70,6 +71,43 @@ map'' f = unfold (null) (f . head) (tail)
 
 iterate' :: (a -> a) -> a -> [a]
 iterate' f = unfold (\x -> False) (f) (f)
+
+-- exercise 7
+-- Modify the binary string tramsmitter example to detect simple tramsmission errors
+-- using the concept of parity bits.
+
+type Bit = Int
+
+bin2int :: [Bit] -> Int
+bin2int = foldr (\x y -> x + 2 * y) 0
+
+make8 :: [Bit] -> [Bit]
+make8 bits = take 8 (bits ++ repeat 0)
+
+addParity :: [Bit] -> [Bit]
+addParity bits = (sum bits `mod` 2) : bits
+
+checkParity :: [Bit] -> [Bit]
+checkParity (x:xs) | x == sum xs `mod` 2 = xs
+                   | otherwise           = error "Wrong parity bit"
+
+encode :: String -> [Bit]
+encode = concat . map (addParity . make8 . int2bin . ord)
+
+chop9 :: [Bit] -> [[Bit]]
+chop9 = unfold (null) (take 9) (drop 9)
+
+decode :: [Bit] -> String
+decode = map (chr . bin2int . checkParity) . chop9
+
+-- exercise 8
+-- Test your new string transmitter program from the previous exercise using a
+-- faulty communications channel that forgets the first bit.
+channel :: [Bit] -> [Bit]
+channel = tail
+
+transmit :: String -> String
+transmit = decode . channel . encode
 
 -- exercise 9
 -- Define a function altMap that alternatively applies its two argument functions
