@@ -26,6 +26,9 @@ takeWhile' _ [] = []
 takeWhile' p (x:xs) | p x        = x : takeWhile' p xs
                     | otherwise  = []
 
+takeWhile'' :: (a -> Bool) -> [a] -> [a]
+takeWhile'' p = foldr (\x acc -> if p x then x : takeWhile'' p acc else []) []
+
 -- exercise 2d
 -- Remove elements from a list while they satisfy a predicate
 dropWhile' :: (a -> Bool) -> [a] -> [a]
@@ -33,6 +36,7 @@ dropWhile' _ [] = []
 dropWhile' p (x:xs) | p x       = dropWhile' p xs
                     | otherwise = x:xs
 
+dropWhile'' p = foldr (\x acc -> if p x then dropWhile'' p acc else x : acc) []                    
 -- exercise 3
 -- Redefine the functions map f and filter p using foldr.
 map' :: (a -> b) -> [a] -> [b]
